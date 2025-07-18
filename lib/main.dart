@@ -46,69 +46,68 @@ class _HomepageState extends State<Homepage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 12.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Delivery + Notification
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Delivery Location',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
-                        ),
-                        Row(
-                          children: const [
-                            Text(
-                              'Azariah Home One',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Icon(Icons.keyboard_arrow_down_rounded),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        shape: BoxShape.circle,
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ✅ Fixed Top Bar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Delivery Location',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
-                      child: const Icon(Icons.notifications_none),
+                      Row(
+                        children: const [
+                          Text(
+                            'Azariah Home One',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Icon(Icons.keyboard_arrow_down_rounded),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      shape: BoxShape.circle,
                     ),
-                  ],
-                ),
+                    child: const Icon(Icons.notifications_none),
+                  ),
+                ],
+              ),
+            ),
 
-                const SizedBox(height: 20),
-
-                // Carousel
-                Column(
+            // 🔽 Scrollable content below top bar
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Carousel
                     CarouselSlider(
                       items: bannerImages.map((path) {
                         return Builder(
                           builder: (BuildContext context) {
                             return Container(
                               width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 4.0,
-                              ),
+                              margin: const EdgeInsets.symmetric(horizontal: 4.0),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Image.asset(path, fit: BoxFit.cover),
@@ -148,101 +147,98 @@ class _HomepageState extends State<Homepage> {
                         );
                       }).toList(),
                     ),
+
+                    const SizedBox(height: 20),
+
+                    // Categories
+                    Center(
+                      child: const Text(
+                        'Explore Categories',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
+
+                    // Grid of category cards
+                    GridView.count(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 1.2,
+                      children: [
+                        _buildCategoryCard('assets/banner1.jpg', 'Restaurant'),
+                        _buildCategoryCard('assets/banner2.jpg', 'Bakery'),
+                        _buildCategoryCard('assets/banner1.jpg', 'Grocery'),
+                        _buildCategoryCard('assets/banner2.jpg', 'Vegetables'),
+                        _buildCategoryCard('assets/banner1.jpg', 'Meat'),
+                        _buildCategoryCard('assets/banner2.jpg', 'Pharmacy'),
+                      ],
+                    ),
                   ],
                 ),
-
-                const SizedBox(height: 20),
-
-                // Categories
-                Center(
-                  child: const Text(
-                    'Explore Categories',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(height: 12.0),
-                // Grid of category cards
-                GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1.2,
-                  children: [
-                    _buildCategoryCard('assets/banner1.jpg', 'Restaurant'),
-                    _buildCategoryCard('assets/banner2.jpg', 'Bakery'),
-                    _buildCategoryCard('assets/banner1.jpg', 'Grocery'),
-                    _buildCategoryCard('assets/banner2.jpg', 'Vegetables'),
-                    _buildCategoryCard('assets/banner1.jpg', 'Meat'),
-                    _buildCategoryCard('assets/banner2.jpg', 'Pharmacy'),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
+      ),
 
-        //  Floating Action Button
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.deepOrange,
-          child: const Icon(Icons.shopping_bag_outlined),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // Floating Action Button
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.deepOrange,
+        child: const Icon(Icons.shopping_bag_outlined),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-        //  Bottom App Bar with notch
-        bottomNavigationBar: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 6.0,
-          child: SizedBox(
-            height: 70,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Home
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.home, color: Colors.deepOrange),
-                    Text("Home", style: TextStyle(fontSize: 12)),
-                  ],
-                ),
-                // Search
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.search),
-                    Text("Search", style: TextStyle(fontSize: 12)),
-                  ],
-                ),
-
-                const SizedBox(width: 40), // Space for FAB
-                // Menu
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.menu_book),
-                    Text("Menu", style: TextStyle(fontSize: 12)),
-                  ],
-                ),
-                // Profile
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.person),
-                    Text("Profile", style: TextStyle(fontSize: 12)),
-                  ],
-                ),
-              ],
-            ),
+      // Bottom Navigation Bar
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 6.0,
+        child: SizedBox(
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.home, color: Colors.deepOrange),
+                  Text("Home", style: TextStyle(fontSize: 12)),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.search),
+                  Text("Search", style: TextStyle(fontSize: 12)),
+                ],
+              ),
+              const SizedBox(width: 40), // Space for FAB
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.menu_book),
+                  Text("Menu", style: TextStyle(fontSize: 12)),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.person),
+                  Text("Profile", style: TextStyle(fontSize: 12)),
+                ],
+              ),
+            ],
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
